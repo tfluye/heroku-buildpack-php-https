@@ -1,5 +1,13 @@
+if ($http_x_forwarded_proto != "https") {
+    return 301 https://$host$request_uri;
+}
+
 location / {
-    index  index.php index.html index.htm;
+    try_files $uri @rewriteapp;
+}
+
+location @rewriteapp {
+    rewrite ^(.*)$ /index.php$1 last;
 }
 
 # for people with app root as doc root, restrict access to a few things
